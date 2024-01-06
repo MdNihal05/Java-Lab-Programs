@@ -43,30 +43,62 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void initComponents() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
 
-        JButton addBookButton = new JButton("Add Book");
-        JButton removeBookButton = new JButton("Remove Book");
-        JButton viewBooksButton = new JButton("View Books");
-        JButton borrowBookButton = new JButton("Borrow Book");
-        JButton returnBookButton = new JButton("Return Book");
+        // Title Panel
+        JPanel titlePanel = new JPanel();
+        JLabel titleLabel = new JLabel("Library Management");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titlePanel.add(titleLabel);
 
+        // Button Panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+        JButton addBookButton = new JButton("<html><b>Add Book</b></html>");
+        JButton removeBookButton = new JButton("<html><b>Remove Book</b></html>");
+        JButton viewBooksButton = new JButton("<html><b>View Books</b></html>");
+        JButton borrowBookButton = new JButton("<html><b>Borrow Book</b></html>");
+        JButton returnBookButton = new JButton("<html><b>Return Book</b></html>");
+
+        // Set font and color for buttons
+        Font buttonFont = new Font("Arial", Font.BOLD, 14);
+        Color buttonColor = new Color(50, 100, 150);
+
+        addBookButton.setFont(buttonFont);
+        addBookButton.setForeground(buttonColor);
+        removeBookButton.setFont(buttonFont);
+        removeBookButton.setForeground(buttonColor);
+        viewBooksButton.setFont(buttonFont);
+        viewBooksButton.setForeground(buttonColor);
+        borrowBookButton.setFont(buttonFont);
+        borrowBookButton.setForeground(buttonColor);
+        returnBookButton.setFont(buttonFont);
+        returnBookButton.setForeground(buttonColor);
+
+        // Add ActionListener for each button
         addBookButton.addActionListener(e -> addBook());
         removeBookButton.addActionListener(e -> removeBook());
         viewBooksButton.addActionListener(e -> viewBooks());
         borrowBookButton.addActionListener(e -> borrowBook());
         returnBookButton.addActionListener(e -> returnBook());
 
-        panel.add(addBookButton);
-        panel.add(removeBookButton);
-        panel.add(viewBooksButton);
-        panel.add(borrowBookButton);
-        panel.add(returnBookButton);
+        buttonPanel.add(addBookButton);
+        buttonPanel.add(removeBookButton);
+        buttonPanel.add(viewBooksButton);
+        buttonPanel.add(borrowBookButton);
+        buttonPanel.add(returnBookButton);
 
-        add(panel);
+        // Add panels to the main panel
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        // Set a border for the main panel
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        add(mainPanel);
     }
-
     private void addBook() {
         String title = JOptionPane.showInputDialog(this, "Enter book title:");
         String author = JOptionPane.showInputDialog(this, "Enter author:");
@@ -79,6 +111,7 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void removeBook() {
+        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books to remove!");
         } else {
@@ -102,7 +135,8 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void viewBooks() {
-        if (books.isEmpty()) {
+        // ... (unchanged)
+         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
         } else {
             Object[][] data = new Object[books.size()][6]; // 6 columns for title, author, available, borrowed, borrower name, borrower contact
@@ -135,6 +169,7 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void borrowBook() {
+        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
             return;
@@ -194,6 +229,7 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void returnBook() {
+        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
             return;
