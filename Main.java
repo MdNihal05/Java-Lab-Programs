@@ -44,11 +44,12 @@ class LibraryManagementGUI extends JFrame {
 
     private void initComponents() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
+        mainPanel.setBackground(new Color(173, 216, 230)); // LightBlue background color
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Empty border for neat appearance
 
         // Title Panel
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
+        titlePanel.setBackground(new Color(173, 216, 230)); // LightBlue background color
         JLabel titleLabel = new JLabel("Library Management System");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(Color.BLACK); // Black title color
@@ -58,7 +59,8 @@ class LibraryManagementGUI extends JFrame {
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
+        buttonPanel.setBackground(new Color(173, 216, 230)); // LightBlue background color
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Empty border for neat appearance
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
