@@ -35,7 +35,7 @@ class LibraryManagementGUI extends JFrame {
         books = new ArrayList<>();
 
         setTitle("Library Management System");
-        setSize(400, 300);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -43,39 +43,30 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void initComponents() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
 
         // Title Panel
-        JPanel titlePanel = new JPanel();
-        JLabel titleLabel = new JLabel("Library Management");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
+        JLabel titleLabel = new JLabel("Library Management System");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setForeground(Color.BLACK); // Black title color
         titlePanel.add(titleLabel);
 
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
+
         // Button Panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(new Color(250, 235, 215)); // AntiqueWhite background color
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton addBookButton = new JButton("<html><b>Add Book</b></html>");
-        JButton removeBookButton = new JButton("<html><b>Remove Book</b></html>");
-        JButton viewBooksButton = new JButton("<html><b>View Books</b></html>");
-        JButton borrowBookButton = new JButton("<html><b>Borrow Book</b></html>");
-        JButton returnBookButton = new JButton("<html><b>Return Book</b></html>");
-
-        // Set font and color for buttons
-        Font buttonFont = new Font("Arial", Font.BOLD, 14);
-        Color buttonColor = new Color(50, 100, 150);
-
-        addBookButton.setFont(buttonFont);
-        addBookButton.setForeground(buttonColor);
-        removeBookButton.setFont(buttonFont);
-        removeBookButton.setForeground(buttonColor);
-        viewBooksButton.setFont(buttonFont);
-        viewBooksButton.setForeground(buttonColor);
-        borrowBookButton.setFont(buttonFont);
-        borrowBookButton.setForeground(buttonColor);
-        returnBookButton.setFont(buttonFont);
-        returnBookButton.setForeground(buttonColor);
+        JButton addBookButton = createStyledButton("Add Book");
+        JButton removeBookButton = createStyledButton("Remove Book");
+        JButton viewBooksButton = createStyledButton("View Books");
+        JButton borrowBookButton = createStyledButton("Borrow Book");
+        JButton returnBookButton = createStyledButton("Return Book");
 
         // Add ActionListener for each button
         addBookButton.addActionListener(e -> addBook());
@@ -84,21 +75,39 @@ class LibraryManagementGUI extends JFrame {
         borrowBookButton.addActionListener(e -> borrowBook());
         returnBookButton.addActionListener(e -> returnBook());
 
-        buttonPanel.add(addBookButton);
-        buttonPanel.add(removeBookButton);
-        buttonPanel.add(viewBooksButton);
-        buttonPanel.add(borrowBookButton);
-        buttonPanel.add(returnBookButton);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        buttonPanel.add(addBookButton, gbc);
 
-        // Add panels to the main panel
-        mainPanel.add(titlePanel, BorderLayout.NORTH);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        buttonPanel.add(removeBookButton, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        buttonPanel.add(viewBooksButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        buttonPanel.add(borrowBookButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        buttonPanel.add(returnBookButton, gbc);
+
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        // Set a border for the main panel
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         add(mainPanel);
     }
+
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setForeground(new Color(70, 130, 180)); // SteelBlue text color
+        button.setBackground(new Color(176, 224, 230)); // PowderBlue background color
+        return button;
+    }
+
     private void addBook() {
         String title = JOptionPane.showInputDialog(this, "Enter book title:");
         String author = JOptionPane.showInputDialog(this, "Enter author:");
@@ -111,7 +120,6 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void removeBook() {
-        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books to remove!");
         } else {
@@ -128,15 +136,25 @@ class LibraryManagementGUI extends JFrame {
             );
 
             if (selectedTitle != null) {
-                books.removeIf(book -> book.title.equals(selectedTitle));
-                JOptionPane.showMessageDialog(this, "Book removed successfully!");
+                Book selectedBook = books.stream()
+                        .filter(book -> book.title.equals(selectedTitle))
+                        .findFirst()
+                        .orElse(null);
+
+                if (selectedBook != null) {
+                    if (selectedBook.isBorrowed) {
+                        JOptionPane.showMessageDialog(this, "Cannot remove the book. It is currently borrowed and must be returned first.");
+                    } else {
+                        books.remove(selectedBook);
+                        JOptionPane.showMessageDialog(this, "Book removed successfully!");
+                    }
+                }
             }
         }
     }
 
     private void viewBooks() {
-        // ... (unchanged)
-         if (books.isEmpty()) {
+        if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
         } else {
             Object[][] data = new Object[books.size()][6]; // 6 columns for title, author, available, borrowed, borrower name, borrower contact
@@ -155,8 +173,7 @@ class LibraryManagementGUI extends JFrame {
             JTable table = new JTable(data, columnNames);
             JScrollPane scrollPane = new JScrollPane(table);
 
-            JPanel panel = new JPanel();
-            panel.setLayout(new BorderLayout());
+            JPanel panel = new JPanel(new BorderLayout());
             panel.add(scrollPane, BorderLayout.CENTER);
 
             JFrame frame = new JFrame("Book List");
@@ -169,7 +186,6 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void borrowBook() {
-        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
             return;
@@ -229,7 +245,6 @@ class LibraryManagementGUI extends JFrame {
     }
 
     private void returnBook() {
-        // ... (unchanged)
         if (books.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No books available!");
             return;
@@ -277,7 +292,7 @@ class LibraryManagementGUI extends JFrame {
                 String enteredContact = JOptionPane.showInputDialog(this, "Enter borrower contact:");
 
                 if (enteredName != null && enteredContact != null &&
-                    enteredName.equals(selectedBook.borrowerName) && enteredContact.equals(selectedBook.borrowerContact)) {
+                        enteredName.equals(selectedBook.borrowerName) && enteredContact.equals(selectedBook.borrowerContact)) {
                     selectedBook.isAvailable = true;
                     selectedBook.isBorrowed = false;
                     selectedBook.borrowerName = "";
@@ -292,7 +307,14 @@ class LibraryManagementGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LibraryManagementGUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            new LibraryManagementGUI().setVisible(true);
+        });
     }
 }
 
